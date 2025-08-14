@@ -1,0 +1,8 @@
+name = "pluto-notebooks"
+uuid = "2a405f62-1e4f-4fb1-b10f-6421f3ab4266"
+version = "0.1.0"
+
+[deps]
+PlutoPages = "5f2db5e6-0bd7-4df8-8ce2-7fbb19d02f58"
+Pluto = "c3e4b0f8-55cb-11ea-2926-15256bba5781"
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"

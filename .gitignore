@@ -1,0 +1,27 @@
+# Julia
+*.jl.*.cov
+*.jl.cov
+*.jl.mem
+/Manifest.toml
+deps/deps.jl
+deps/build.log
+deps/downloads/
+docs/build/
+docs/site/
+
+# PlutoPages
+_site/
+generated_site/
+
+# Logs
+logs/*.log
+
+# macOS
+.DS_Store
+
+# Temporary files
+*.tmp
+*~
+
+# Cache
+.cache/
