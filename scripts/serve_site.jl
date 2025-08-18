@@ -133,8 +133,9 @@ function create_dashboard_html(site_port::Int)
             <h2>📝 Development</h2>
             <p>Edit your notebooks in the <code>src/</code> directory:</p>
             <ul>
-                <li><a href="file:///Users/lshsa2/code/pluto-notebooks/src/index.jl">index.jl</a> (Homepage)</li>
-                <li><a href="file:///Users/lshsa2/code/pluto-notebooks/src/interactive-example.jl">interactive-example.jl</a> (Demo)</li>
+                <li>index.jl/.jlmd (Homepage)</li>
+                <li>Standalone .jl files or notebook folders</li>
+                <li>Use <code>task create &lt;name&gt;</code> for new notebook folders</li>
             </ul>
         </div>
         

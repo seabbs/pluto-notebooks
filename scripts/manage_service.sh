@@ -25,11 +25,13 @@ case "$1" in
         ;;
     logs)
         echo "Showing recent logs..."
-        tail -n 50 /Users/lshsa2/code/pluto-notebooks/logs/stdout.log
+        PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+        tail -n 50 "$PROJECT_DIR/logs/stdout.log"
         ;;
     errors)
         echo "Showing recent errors..."
-        tail -n 50 /Users/lshsa2/code/pluto-notebooks/logs/stderr.log
+        PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+        tail -n 50 "$PROJECT_DIR/logs/stderr.log"
         ;;
     *)
         echo "Usage: $0 {start|stop|restart|status|logs|errors}"
