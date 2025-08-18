@@ -1,0 +1,109 @@
+version: '3'
+
+vars:
+  PROJECT_DIR: /Users/lshsa2/code/pluto-notebooks
+  SERVICE_NAME: co.samabbott.pluto-notebooks
+  PLUTO_URL: http://localhost:1234
+
+tasks:
+  # Service Management
+  start:
+    desc: Start the persistent Pluto service
+    cmds:
+      - ./scripts/manage_service.sh start
+      - echo "Pluto editor available at {{.PLUTO_URL}}"
+
+  stop:
+    desc: Stop the Pluto service
+    cmds:
+      - ./scripts/manage_service.sh stop
+
+  restart:
+    desc: Restart the Pluto service
+    cmds:
+      - ./scripts/manage_service.sh restart
+
+  status:
+    desc: Check if the Pluto service is running
+    cmds:
+      - ./scripts/manage_service.sh status
+
+  # Logs
+  logs:
+    desc: View recent service logs
+    cmds:
+      - ./scripts/manage_service.sh logs
+
+  errors:
+    desc: View recent service errors
+    cmds:
+      - ./scripts/manage_service.sh errors
+
+  follow-logs:
+    desc: Follow live service logs
+    cmds:
+      - tail -f logs/stdout.log
+
+  # Development
+  open:
+    desc: Open Pluto editor in browser
+    cmds:
+      - open {{.PLUTO_URL}}
+
+  edit:
+    desc: Start manual Pluto session
+    cmds:
+      - julia --project scripts/pluto_editor.jl
+
+  # Site Generation
+  generate:
+    desc: Generate static site from notebooks
+    cmds:
+      - julia --project -e "using PlutoPages; PlutoPages.generate(input_dir=\"{{.PROJECT_DIR}}/src\", output_dir=\"{{.PROJECT_DIR}}/generated_site\", cache_dir=\"{{.PROJECT_DIR}}/.cache\")"
+
+  # Git
+  commit:
+    desc: Commit notebook changes
+    cmds:
+      - git add src/
+      - julia --project scripts/auto_commit.jl
+
+  push:
+    desc: Push changes to trigger deployment
+    cmds:
+      - task: commit
+      - git push origin main
+      - echo "Deployment triggered"
+
+  # Maintenance
+  install:
+    desc: Install Julia dependencies
+    cmds:
+      - julia --project -e "using Pkg; Pkg.instantiate()"
+
+  clean:
+    desc: Clean generated files
+    cmds:
+      - rm -rf generated_site/
+      - rm -rf .cache/
+
+  # Health Check
+  health:
+    desc: Check system health
+    cmds:
+      - echo "=== Service Status ==="
+      - task: status
+      - echo "=== Port Check ==="
+      - lsof -i :1234 || echo "Port 1234 not in use"
+
+  info:
+    desc: Show system information
+    cmds:
+      - echo "Project{{":"}} {{.PROJECT_DIR}}"
+      - echo "Pluto URL{{":"}} {{.PLUTO_URL}}"
+      - echo "Service{{":"}} {{.SERVICE_NAME}}"
+
+  default:
+    desc: Show available tasks
+    cmds:
+      - task --list-all

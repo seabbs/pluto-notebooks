@@ -15,15 +15,24 @@ function git_status()
     return !isempty(strip(result))
 end
 
-function commit_changes()
+function commit_changes(push_to_remote=false)
     """Commit all changes with timestamp."""
     timestamp = Dates.format(now(), "yyyy-mm-dd HH:MM:SS")
-    commit_msg = "Auto-commit: notebook updates at $timestamp"
+    commit_msg = "Auto-commit: notebook updates at $timestamp\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>"
     
     run(`git add .`)
     run(`git commit -m $commit_msg`)
     
-    println("Committed changes: $commit_msg")
+    println("✓ Committed changes: Auto-commit at $timestamp")
+    
+    if push_to_remote
+        try
+            run(`git push origin main`)
+            println("✓ Pushed to remote repository")
+        catch e
+            println("⚠ Failed to push to remote: $e")
+        end
+    end
 end
 
 function main()
@@ -32,8 +41,11 @@ function main()
         exit(1)
     end
     
+    # Check for --push flag
+    push_to_remote = "--push" in ARGS
+    
     if git_status()
-        commit_changes()
+        commit_changes(push_to_remote)
     else
         println("No changes to commit")
     end
