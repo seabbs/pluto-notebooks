@@ -6,9 +6,3 @@ PlutoPages = "d5dc3dd1-4774-47c7-8860-0a1ad9e34b8c"
 PlutoSliderServer = "2fc8631c-6f24-4c5b-bca7-cbb509c42db4"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 Sockets = "6462fe0b-24de-5631-8697-dd941f90decc"
-
-[compat]
-julia = "1.8"
-PlutoPages = "1"
-PlutoSliderServer = "1"
-PlutoUI = "0.7"
