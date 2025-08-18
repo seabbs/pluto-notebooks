@@ -87,6 +87,49 @@ tasks:
       - rm -rf generated_site/
       - rm -rf .cache/
 
+  # Publishing
+  create:
+    desc: Create new notebook folder in in-progress
+    cmds:
+      - |
+        NOTEBOOK="{{index .CLI_ARGS 0}}"
+        if [ -z "$NOTEBOOK" ]; then
+          echo "Error: Please specify notebook folder name: task create <folder-name>"
+          exit 1
+        fi
+        if [ -d "src/in-progress/$NOTEBOOK" ]; then
+          echo "Error: Notebook folder src/in-progress/$NOTEBOOK already exists"
+          exit 1
+        fi
+        echo "Creating notebook folder: $NOTEBOOK"
+        mkdir -p "src/in-progress/$NOTEBOOK"
+        touch "src/in-progress/$NOTEBOOK/$NOTEBOOK.jl"
+        echo "Created src/in-progress/$NOTEBOOK/$NOTEBOOK.jl"
+        echo "You can now work on your notebook in the in-progress folder"
+
+  publish:
+    desc: Move notebook folder from in-progress to src and commit
+    cmds:
+      - |
+        NOTEBOOK="{{index .CLI_ARGS 0}}"
+        if [ -z "$NOTEBOOK" ]; then
+          echo "Error: Please specify notebook folder name: task publish <folder-name>"
+          exit 1
+        fi
+        if [ ! -d "src/in-progress/$NOTEBOOK" ]; then
+          echo "Error: Notebook folder src/in-progress/$NOTEBOOK does not exist"
+          exit 1
+        fi
+        if [ -d "src/$NOTEBOOK" ]; then
+          echo "Error: Notebook folder src/$NOTEBOOK already exists"
+          exit 1
+        fi
+        echo "Moving $NOTEBOOK from in-progress to src..."
+        mv "src/in-progress/$NOTEBOOK" "src/$NOTEBOOK"
+        git add "src/$NOTEBOOK"
+      - task: push
+      - echo "Published $NOTEBOOK successfully"
+
   # Health Check
   health:
     desc: Check system health

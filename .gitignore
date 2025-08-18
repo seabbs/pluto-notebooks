@@ -25,3 +25,6 @@ logs/*.log
 
 # Cache
 .cache/
+
+# In-progress notebooks
+src/in-progress/
